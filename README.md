@@ -1,2 +1,2 @@
 # Android
-Repozitorijum za lab vezbe iz razvoja mobilnih aplikacija
+Repozitorijum za projekat iz razvoja mobilnih aplikacija
