@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "768814074004",
+    "project_id": "mobproj-1b699",
+    "storage_bucket": "mobproj-1b699.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:768814074004:android:48b330ca9e3b99b1320c81",
+        "android_client_info": {
+          "package_name": "elfak.mosis.mobproj"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "768814074004-ob2ben2ls7gk75jpocrd7ft4ikm5290m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAF4OVb_fO7WshWsJ2D-hfqmB_oKTyRSJ8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "768814074004-ob2ben2ls7gk75jpocrd7ft4ikm5290m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

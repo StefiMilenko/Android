@@ -1,0 +1,4 @@
+Aplikacija za nalazenje poslova. 
+Aplikacija prikazuje poslove na interaktivnoj mapi. 
+Aplikacija pruza mogucnosti filtriranja u zavisnosti od vrste posla, udaljenosti od zadate lokacije, itd. 
+Korisnici mogu da ocenjuju poslove i da postavljaju komentare i slike. https://github.com/StefiMilenko/Android
