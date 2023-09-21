@@ -9,10 +9,19 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.userProfileChangeRequest
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.database.ktx.database
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.ktx.storage
+import elfak.mosis.mobproj.data.User
+import elfak.mosis.mobproj.model.LoginRegistrationViewModel
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
-
+    private lateinit var database: FirebaseDatabase
+    private lateinit var usersRef: DatabaseReference
     public override fun onStart() {
         super.onStart()
         // Check if user is signed in (non-null) and update UI accordingly.
@@ -28,6 +37,8 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
         auth = FirebaseAuth.getInstance()
+        database = FirebaseDatabase.getInstance()
+        usersRef = database.reference.child("users")
         val editEmail: EditText = findViewById<EditText>(R.id.edit_email)
         val editPassword: EditText = findViewById<EditText>(R.id.edit_password)
         val regButton: Button = findViewById<Button>(R.id.register_button)
@@ -37,35 +48,41 @@ class RegisterActivity : AppCompatActivity() {
             val email:String =editEmail.text.toString()
             val pass: String = editPassword.text.toString()
 
-            if (TextUtils.isEmpty(email)){
-                Toast.makeText(this,"Enter email", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
+            if (email.isNotEmpty() && pass.isNotEmpty()) {
+                registerUser(email, pass)
+            } else {
+                Toast.makeText(this, "Please fill in all fields.", Toast.LENGTH_SHORT).show()
             }
-            if (TextUtils.isEmpty(pass)){
-                Toast.makeText(this,"Enter password", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            auth.createUserWithEmailAndPassword(email, pass)
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        Toast.makeText(this, "Account created.", Toast.LENGTH_SHORT,).show()
-                        val intent : Intent = Intent(applicationContext, LoginActivity::class.java)
-                        startActivity(intent)
-                        finish()
-
-                    } else {
-                        // If sign in fails, display a message to the user.
-
-                        Toast.makeText(this, "Authentication failed.", Toast.LENGTH_SHORT,).show()
-
-                    }
-                }
         }
+
         gotoButton.setOnClickListener {
             val intent : Intent = Intent(applicationContext, LoginActivity::class.java)
             startActivity(intent)
             finish()
         }
+    }
+
+    private fun registerUser(email: String, password: String) {
+        auth.createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    // User registration successful
+                    val userId = auth.currentUser?.uid ?: ""
+                    val userRef = usersRef.child(userId)
+                    userRef.child("email").setValue(email)
+
+                    Toast.makeText(this, "Registration successful!", Toast.LENGTH_SHORT).show()
+                    val intent : Intent = Intent(applicationContext, LoginActivity::class.java)
+                    startActivity(intent)
+                    finish() // You can navigate to another activity here
+                } else {
+                    // Registration failed
+                    Toast.makeText(
+                        this,
+                        "Registration failed: ${task.exception?.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
     }
 }

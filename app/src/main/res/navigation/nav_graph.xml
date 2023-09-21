@@ -20,6 +20,9 @@
         <action
             android:id="@+id/action_HomeFragment_to_MapFragment"
             app:destination="@id/MapFragment" />
+        <action
+            android:id="@+id/action_HomeFragment_to_UserListFragment"
+            app:destination="@id/UserListFragment" />
     </fragment>
     <fragment
         android:id="@+id/ListFragment"
@@ -61,4 +64,17 @@
     <action
         android:id="@+id/action_MapFragment_to_EditFragment"
         app:destination="@id/EditFragment" />
+    <fragment
+        android:id="@+id/UserListFragment"
+        android:name="elfak.mosis.mobproj.UserListFragment"
+        android:label="@string/view_fragment_label"
+        tools:layout="@layout/fragment_user_list">
+    </fragment>
+    <action
+        android:id="@+id/action_UserListFragment_to_HomeFragment"
+        app:destination="@id/HomeFragment" />
+    <action
+        android:id="@+id/action_UserListFragment_to_EditFragment"
+        app:destination="@id/HomeFragment" />
+
 </navigation>

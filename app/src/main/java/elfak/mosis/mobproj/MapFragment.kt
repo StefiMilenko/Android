@@ -19,12 +19,15 @@ import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.MapEventsOverlay
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
-
+import android.graphics.drawable.Drawable
+import org.osmdroid.views.overlay.ItemizedIconOverlay
+import org.osmdroid.views.overlay.OverlayItem
 class MapFragment : Fragment() {
+    //private val markerIcon: Drawable = TODO()
     lateinit var map: MapView
     private val posaoViewModel: PosaoViewModel by activityViewModels()
     private val locationViewModel: LocationViewModel by activityViewModels()
-
+    private lateinit var locationOverlay: MyLocationNewOverlay
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -72,6 +75,7 @@ class MapFragment : Fragment() {
         else {
             if(posaoViewModel.selected!=null){
                 startPoint =GeoPoint(posaoViewModel.selected!!.latitude.toDouble(), posaoViewModel.selected!!.longitude.toDouble())
+
             } else {
                 setMyLocationOverlay()
             }
