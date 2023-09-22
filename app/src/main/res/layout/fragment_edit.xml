@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -12,7 +13,7 @@
         android:id="@+id/editposao_name_edit"
         android:layout_width="415dp"
         android:layout_height="57dp"
-        android:layout_marginTop="136dp"
+        android:layout_marginTop="64dp"
         android:hint="Edit name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -21,20 +22,18 @@
 
     <EditText
         android:id="@+id/editposao_desc_edit"
-        android:layout_width="410dp"
-        android:layout_height="152dp"
-        android:layout_marginBottom="172dp"
+        android:layout_width="403dp"
+        android:layout_height="51dp"
+        android:layout_marginTop="68dp"
         android:hint="Edit description"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editposao_name_edit" />
 
     <TextView
         android:id="@+id/editposao_name_text"
         android:layout_width="117dp"
         android:layout_height="39dp"
-        android:layout_marginBottom="56dp"
+        android:layout_marginBottom="12dp"
         android:text="@string/editposao_name_label"
         app:layout_constraintBottom_toTopOf="@+id/editposao_name_edit"
         app:layout_constraintEnd_toEndOf="parent"
@@ -43,13 +42,13 @@
 
     <TextView
         android:id="@+id/editposao_desc_text"
-        android:layout_width="87dp"
-        android:layout_height="37dp"
-        android:layout_marginBottom="12dp"
+        android:layout_width="110dp"
+        android:layout_height="32dp"
+        android:layout_marginBottom="20dp"
         android:text="@string/editposao_desc_label"
         app:layout_constraintBottom_toTopOf="@+id/editposao_desc_edit"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.099"
+        app:layout_constraintHorizontal_bias="0.006"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
@@ -92,5 +91,25 @@
         android:text="Latitude"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <EditText
+        android:id="@+id/editposao_salary_edit"
+        android:layout_width="403dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="32dp"
+        android:text="Salary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.666"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editposao_desc_edit" />
+
+    <EditText
+        android:id="@+id/editposao_stars_edit"
+        android:layout_width="411dp"
+        android:layout_height="53dp"
+        android:layout_marginTop="20dp"
+        android:text="Stars"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editposao_salary_edit" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

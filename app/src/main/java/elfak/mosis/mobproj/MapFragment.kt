@@ -17,11 +17,11 @@ import org.osmdroid.events.MapEventsReceiver
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.MapEventsOverlay
+import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
-import android.graphics.drawable.Drawable
-import org.osmdroid.views.overlay.ItemizedIconOverlay
-import org.osmdroid.views.overlay.OverlayItem
+
+
 class MapFragment : Fragment() {
     //private val markerIcon: Drawable = TODO()
     lateinit var map: MapView
@@ -64,6 +64,11 @@ class MapFragment : Fragment() {
         map.controller.setZoom(12.0)
         val startPoint = GeoPoint(43.3209, 21.8958)
         map.controller.setCenter(startPoint)
+        val startMarker = Marker(map)
+        startMarker.position = startPoint
+        startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
+        map.getOverlays().add(startMarker)
+        map.invalidate()
     }
 
     private fun setupMap(){
@@ -74,7 +79,10 @@ class MapFragment : Fragment() {
         }
         else {
             if(posaoViewModel.selected!=null){
-                startPoint =GeoPoint(posaoViewModel.selected!!.latitude.toDouble(), posaoViewModel.selected!!.longitude.toDouble())
+                startPoint = posaoViewModel.selected!!.longitude?.let { posaoViewModel.selected!!.latitude?.let { it1 ->
+                    GeoPoint(
+                        it1.toDouble(), it.toDouble())
+                } }!!
 
             } else {
                 setMyLocationOverlay()

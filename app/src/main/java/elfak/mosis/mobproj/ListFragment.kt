@@ -71,6 +71,7 @@ class ListFragment : Fragment() {
         }
         else if (item.itemId == 2){
             posaoViewModel.selected=posaoViewModel.PosaoList[info.position]
+            this.findNavController().navigate(R.id.action_ListFragment_to_EditFragment)
         }
         else if (item.itemId == 3){
             posaoViewModel.PosaoList.removeAt(info.position)

@@ -49,6 +49,9 @@
     <action
         android:id="@+id/action_EditFragment_to_MapFragment"
         app:destination="@id/MapFragment" />
+    <action
+        android:id="@+id/action_EditFragment_to_ListFragment"
+        app:destination="@id/ListFragment" />
     <fragment
         android:id="@+id/ViewFragment"
         android:name="elfak.mosis.mobproj.ViewFragment"
