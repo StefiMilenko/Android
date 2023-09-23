@@ -23,8 +23,8 @@
         android:title="@string/action_logout"
         app:showAsAction="never" />
     <item
-        android:id="@+id/action_userlist"
+        android:id="@+id/action_posaolist"
         android:orderInCategory="100"
-        android:title="@string/action_userlist"
+        android:title="@string/action_posaolist"
         app:showAsAction="never" />
 </menu>

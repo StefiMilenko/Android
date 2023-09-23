@@ -21,8 +21,8 @@
             android:id="@+id/action_HomeFragment_to_MapFragment"
             app:destination="@id/MapFragment" />
         <action
-            android:id="@+id/action_HomeFragment_to_UserListFragment"
-            app:destination="@id/UserListFragment" />
+            android:id="@+id/action_HomeFragment_to_PosaoViewFragment"
+            app:destination="@id/PosaoViewFragment" />
     </fragment>
     <fragment
         android:id="@+id/ListFragment"
@@ -68,16 +68,17 @@
         android:id="@+id/action_MapFragment_to_EditFragment"
         app:destination="@id/EditFragment" />
     <fragment
-        android:id="@+id/UserListFragment"
-        android:name="elfak.mosis.mobproj.UserListFragment"
-        android:label="@string/view_fragment_label"
-        tools:layout="@layout/fragment_user_list">
+        android:id="@+id/PosaoViewFragment"
+        android:name="elfak.mosis.mobproj.PosaoViewFragment"
+        android:label="@string/view_posao_label"
+        tools:layout="@layout/fragment_posao_view">
     </fragment>
     <action
-        android:id="@+id/action_UserListFragment_to_HomeFragment"
+        android:id="@+id/action_PosaoViewFragment_to_HomeFragment"
         app:destination="@id/HomeFragment" />
     <action
-        android:id="@+id/action_UserListFragment_to_EditFragment"
-        app:destination="@id/HomeFragment" />
+        android:id="@+id/action_PosaoViewFragment_to_EditFragment"
+        app:destination="@id/EditFragment" />
+
 
 </navigation>

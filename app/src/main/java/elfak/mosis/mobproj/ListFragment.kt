@@ -16,9 +16,6 @@ import elfak.mosis.mobproj.data.Posao
 import elfak.mosis.mobproj.databinding.FragmentListBinding
 import elfak.mosis.mobproj.model.PosaoViewModel
 
-/**
- * A simple [Fragment] subclass as the second destination in the navigation.
- */
 class ListFragment : Fragment() {
 
     private var _binding: FragmentListBinding? = null
@@ -32,7 +29,6 @@ class ListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         _binding = FragmentListBinding.inflate(inflater, container, false)
         return binding.root
 
@@ -40,13 +36,13 @@ class ListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        posaoViewModel.fetchAllPosao()
         val posaoList: ListView = requireView().findViewById<ListView>(R.id.mobproj_list)
         posaoList.adapter = ArrayAdapter<Posao>(view.context, android.R.layout.simple_list_item_1, posaoViewModel.PosaoList)
         posaoList.setOnItemClickListener(object: AdapterView.OnItemClickListener {
-            @SuppressLint("SuspiciousIndentation")
             override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-             var posao: Posao = p0?.adapter?.getItem(p2) as Posao
-             posaoViewModel.selected = posao
+                var posao: Posao = p0?.adapter?.getItem(p2) as Posao
+                posaoViewModel.selected = posao
                 findNavController().navigate(R.id.action_ListFragment_to_ViewFragment)
             }
         })

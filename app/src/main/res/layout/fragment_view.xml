@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".ViewFragment">
 
-    <!-- TODO: Update blank fragment layout -->
 
     <TextView
         android:id="@+id/viewposao_desc_text"

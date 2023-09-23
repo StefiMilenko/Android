@@ -78,7 +78,7 @@
         android:layout_height="54dp"
         android:layout_marginStart="20dp"
         android:layout_marginBottom="96dp"
-        android:text="Longitude"
+        android:text="Latitude"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -88,7 +88,7 @@
         android:layout_height="56dp"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="96dp"
-        android:text="Latitude"
+        android:text="Longitude"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -97,7 +97,7 @@
         android:layout_width="403dp"
         android:layout_height="55dp"
         android:layout_marginTop="32dp"
-        android:text="Salary"
+        android:text="@string/edit_salary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.666"
         app:layout_constraintStart_toStartOf="parent"
@@ -108,7 +108,7 @@
         android:layout_width="411dp"
         android:layout_height="53dp"
         android:layout_marginTop="20dp"
-        android:text="Stars"
+        android:text="@string/edit_stars"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editposao_salary_edit" />
 

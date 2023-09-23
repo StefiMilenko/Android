@@ -4,12 +4,16 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.*
+import android.widget.Button
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
+import com.google.firebase.database.*
+import elfak.mosis.mobproj.data.Posao
 import elfak.mosis.mobproj.model.LocationViewModel
 import elfak.mosis.mobproj.model.PosaoViewModel
 import org.osmdroid.config.Configuration
@@ -23,10 +27,12 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 
 
 class MapFragment : Fragment() {
-    //private val markerIcon: Drawable = TODO()
+
     lateinit var map: MapView
     private val posaoViewModel: PosaoViewModel by activityViewModels()
     private val locationViewModel: LocationViewModel by activityViewModels()
+    private val startPoint = GeoPoint(43.3209, 21.8958)
+
     private lateinit var locationOverlay: MyLocationNewOverlay
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,42 +54,74 @@ class MapFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         var ctx: Context? = getActivity()?.getApplicationContext()
-        Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences((ctx!!)))
+        Configuration.getInstance()
+            .load(ctx, PreferenceManager.getDefaultSharedPreferences((ctx!!)))
         map = requireView().findViewById<MapView>(R.id.map)
         map.setMultiTouchControls(true)
-        if(ActivityCompat.checkSelfPermission(requireActivity(),android.Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED &&
-            ActivityCompat.checkSelfPermission(requireActivity(),android.Manifest.permission.ACCESS_COARSE_LOCATION)!=PackageManager.PERMISSION_GRANTED)
-        {
+        val database = FirebaseDatabase.getInstance()
+        val posaoRef: DatabaseReference = database.getReference("posao")
+
+        if (ActivityCompat.checkSelfPermission(
+                requireActivity(),
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(
+                requireActivity(),
+                android.Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
             requestPermissionLauncher.launch(
                 android.Manifest.permission.ACCESS_FINE_LOCATION
             )
-        }
-        else{
+        } else {
             setupMap()
         }
         map.controller.setZoom(12.0)
-        val startPoint = GeoPoint(43.3209, 21.8958)
+        //val startPoint = GeoPoint(43.3209, 21.8958)
         map.controller.setCenter(startPoint)
-        val startMarker = Marker(map)
-        startMarker.position = startPoint
-        startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
-        map.getOverlays().add(startMarker)
         map.invalidate()
+        val fetchButton: Button = requireView().findViewById<Button>(R.id.fetchbutton)
+        fetchButton.setOnClickListener {
+            posaoViewModel.fetchAllPosao()
+            posaoViewModel.posaoLiveData.observe(viewLifecycleOwner, Observer { posaoList ->
+                // Clear existing markers on the map
+                map.overlays.clear()
+
+               /* val query = posaoRef
+                    .orderByChild("latitude")
+                    .startAt(startPoint.latitude-0.2)
+                    .endAt(startPoint.latitude+0.2)
+                    .orderByChild("longitude")
+                    .startAt(startPoint.longitude-0.2)
+                    .endAt(startPoint.longitude+0.2)*/
+
+                // Add markers for each Posao
+                for (posao in posaoList) {
+                    val marker = Marker(map)
+                    val log = posao.longitude!!.toDouble()
+                    val lat = posao.latitude!!.toDouble()
+                    marker.position = GeoPoint(log, lat)
+                    marker.title = posao.name!!
+                    map.overlays.add(marker)
+                }
+
+                // Refresh the map view
+                map.invalidate()
+                setMyLocationOverlay()
+            })
+        }
     }
 
     private fun setupMap(){
-        var startPoint:GeoPoint = GeoPoint(43.3209, 21.8958)
+        //var startPoint:GeoPoint = GeoPoint(43.3209, 21.8958)
         map.controller.setZoom(12.0)
         if(locationViewModel.setLocation){
             setOnMapClickOverlay()
         }
         else {
             if(posaoViewModel.selected!=null){
-                startPoint = posaoViewModel.selected!!.longitude?.let { posaoViewModel.selected!!.latitude?.let { it1 ->
-                    GeoPoint(
-                        it1.toDouble(), it.toDouble())
-                } }!!
-
+                startPoint.longitude = posaoViewModel.selected!!.longitude!!.toDouble()
+                startPoint.latitude = posaoViewModel.selected!!.latitude!!.toDouble()
             } else {
                 setMyLocationOverlay()
             }
@@ -111,7 +149,7 @@ class MapFragment : Fragment() {
             override fun singleTapConfirmedHelper(p: GeoPoint?): Boolean {
                 var long= p?.longitude.toString()
                 var lat= p?.latitude.toString()
-                locationViewModel.setLocation(long,lat)
+                locationViewModel.setLocation(lat,long)
                 findNavController().popBackStack()
                 return true
             }
@@ -151,4 +189,5 @@ class MapFragment : Fragment() {
         super.onPause()
         map.onPause()
     }
+
 }

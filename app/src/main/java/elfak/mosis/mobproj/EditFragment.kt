@@ -57,6 +57,7 @@ class EditFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         db = Firebase.database.reference
 
         val editName: EditText = requireView().findViewById<EditText>(R.id.editposao_name_edit)
@@ -103,8 +104,8 @@ class EditFragment : Fragment() {
             if(posaoViewModel.selected!=null){
                 posaoViewModel.selected?.name = name
                 posaoViewModel.selected?.description = desc
-                posaoViewModel.selected?.salary = desc
-                posaoViewModel.selected?.stars = desc
+                posaoViewModel.selected?.salary = salary
+                posaoViewModel.selected?.stars = stars
                 posaoViewModel.selected?.longitude= long
                 posaoViewModel.selected?.latitude = lat
                 val uuid = UUID.randomUUID().toString()
@@ -157,7 +158,6 @@ class EditFragment : Fragment() {
         val database = Firebase.database("https://mobproj-1b699-default-rtdb.europe-west1.firebasedatabase.app/")
 
         val myRef = database.reference.child("posao").child(uuid).setValue(posao)
-        database.reference.child("name").child(uuid).setValue(name)
             .addOnSuccessListener{
                 _actionState.value = ActionState.Success
             }

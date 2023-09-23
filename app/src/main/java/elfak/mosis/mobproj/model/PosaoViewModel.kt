@@ -1,12 +1,12 @@
 package elfak.mosis.mobproj.model
 
+import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.google.firebase.database.ktx.database
@@ -21,6 +21,7 @@ class PosaoViewModel: ViewModel() {
 
     private lateinit var db: FirebaseDatabase
     private lateinit var ref: DatabaseReference
+
 
     private val storage = Firebase.storage
     private val _actionState = MutableLiveData<ActionState>()
@@ -40,9 +41,10 @@ class PosaoViewModel: ViewModel() {
     val latitude: LiveData<String> = _latitude
 
     var funUpdatePosao: ((Posao)-> Unit)? = null
+    var posaoLiveData: MutableLiveData<List<Posao>> = MutableLiveData()
 
 
-    val PosaoList: ArrayList<Posao> = ArrayList()
+    var PosaoList: ArrayList<Posao> = ArrayList()
 
     fun addPosao (posao: Posao){
         PosaoList.add(posao)
@@ -101,6 +103,27 @@ class PosaoViewModel: ViewModel() {
             return false
         }
         return true
+    }
+
+    fun fetchAllPosao() {
+        val posaoList = mutableListOf<Posao>()
+        ref = FirebaseDatabase.getInstance().reference.child("posao")
+        ref.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (dataSnapshot in snapshot.children) {
+                    val posao = dataSnapshot.getValue(Posao::class.java)
+                    posao?.let {
+                        posaoList.add(it)
+                    }
+                }
+                PosaoList = posaoList as ArrayList<Posao>
+                posaoLiveData.postValue(posaoList)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Handle database error
+            }
+        })
     }
 
     /*fun setNameQuery(){

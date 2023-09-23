@@ -70,8 +70,8 @@ class HomeFragment : Fragment() {
                 this.findNavController().navigate(R.id.action_HomeFragment_to_EditFragment)
                 true
             }
-            R.id.action_userlist -> {
-                this.findNavController().navigate(R.id.action_HomeFragment_to_UserListFragment)
+            R.id.action_posaolist -> {
+                this.findNavController().navigate(R.id.action_HomeFragment_to_PosaoViewFragment)
                 true
             }
             else -> super.onOptionsItemSelected(item)
