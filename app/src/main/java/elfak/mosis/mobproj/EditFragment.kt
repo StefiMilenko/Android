@@ -64,7 +64,7 @@ class EditFragment : Fragment() {
         val editDesc: EditText = requireView().findViewById<EditText>(R.id.editposao_desc_edit)
         val editSalary: EditText = requireView().findViewById<EditText>(R.id.editposao_salary_edit)
         val editStars: EditText = requireView().findViewById<EditText>(R.id.editposao_stars_edit)
-        val editLong: EditText = requireView().findViewById<EditText>(R.id.editposao_long_edit)
+        /*val editLong: EditText = requireView().findViewById<EditText>(R.id.editposao_long_edit)
         val longObserver = Observer<String> { newValue ->
             editLong.setText(newValue.toString())
         }
@@ -73,7 +73,7 @@ class EditFragment : Fragment() {
         val latObserver = Observer<String> { newValue ->
             editLat.setText(newValue.toString())
         }
-        locationViewModel.latitude.observe(viewLifecycleOwner, latObserver)
+        locationViewModel.latitude.observe(viewLifecycleOwner, latObserver)*/
         if (posaoViewModel.selected!=null){
             editName.setText(posaoViewModel.selected?.name)
             editName.setText(posaoViewModel.selected?.description)
@@ -99,8 +99,10 @@ class EditFragment : Fragment() {
             val desc: String = editDesc.text.toString()
             val salary: String = editSalary.text.toString()
             val stars: String = editStars.text.toString()
-            val long:String = editLong.text.toString()
-            val lat:String = editLat.text.toString()
+            //val long:String = editLong.text.toString()
+            //val lat:String = editLat.text.toString()
+            val long:String = locationViewModel.userlongitude.value!!
+            val lat:String = locationViewModel.userlatitude.value!!
             if(posaoViewModel.selected!=null){
                 posaoViewModel.selected?.name = name
                 posaoViewModel.selected?.description = desc

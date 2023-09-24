@@ -16,7 +16,7 @@
     <string name="hello_list_fragment">Hello second fragment. Arg: %1$s</string>
 
     <string name="editposao_name_label">Name:</string>
-    <string name="editposao_desc_label">Description:</string>
+    <string name="editposao_desc_label">Comment:</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="action_logout">Log Out</string>
@@ -25,4 +25,8 @@
     <string name="action_posaolist">Posao List</string>
     <string name="edit_stars">Rating</string>
     <string name="edit_salary">Salary</string>
+    <string name="filter_radius_string">Radius in km</string>
+    <string name="filter_stars_string">Filter by rating</string>
+    <string name="filter_salary_string">Filter by salary</string>
+    <string name="filter_name_string">Filter by name</string>
 </resources>

@@ -1,6 +1,7 @@
 package elfak.mosis.mobproj.model
 
 import android.annotation.SuppressLint
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -22,6 +23,10 @@ class PosaoViewModel: ViewModel() {
     private lateinit var db: FirebaseDatabase
     private lateinit var ref: DatabaseReference
 
+    var isUserSet: Boolean = false
+
+    private val _userlat = MutableLiveData<String>()
+    private val _userlog = MutableLiveData<String>()
 
     private val storage = Firebase.storage
     private val _actionState = MutableLiveData<ActionState>()
@@ -39,6 +44,16 @@ class PosaoViewModel: ViewModel() {
     val longitude: LiveData<String> = _longitude
     private val _latitude = MutableLiveData<String>()
     val latitude: LiveData<String> = _latitude
+
+    private val _namefilter = MutableLiveData<String>()
+    val namefilter : LiveData<String> = _namefilter
+    private val _salaryfilter = MutableLiveData<String>()
+    val salaryfilter : LiveData<String> = _salaryfilter
+    private val _starsfilter = MutableLiveData<String>()
+    val starsfilter : LiveData<String> = _starsfilter
+    private val _radiusfilter = MutableLiveData<String>()
+    val radiusfilter : LiveData<String> = _radiusfilter
+
 
     var funUpdatePosao: ((Posao)-> Unit)? = null
     var posaoLiveData: MutableLiveData<List<Posao>> = MutableLiveData()
@@ -58,13 +73,11 @@ class PosaoViewModel: ViewModel() {
         val size = string.length
         val substrings: MutableList<String> = mutableListOf()
         for (substringSize in 1 ..size){
-            substrings.add(string.substring(0, substringSize))
+            var smallString = string.substring(0, substringSize).lowercase()
+            smallString = smallString.lowercase()
+            substrings.add(smallString.lowercase())
         }
         return substrings
-    }
-
-    fun putPosaotoDB(){
-        val uuid = UUID.randomUUID().toString()
     }
 
     fun putPosao(uuid: String){
@@ -106,7 +119,7 @@ class PosaoViewModel: ViewModel() {
     }
 
     fun fetchAllPosao() {
-        val posaoList = mutableListOf<Posao>()
+        var posaoList = mutableListOf<Posao>()
         ref = FirebaseDatabase.getInstance().reference.child("posao")
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -115,6 +128,18 @@ class PosaoViewModel: ViewModel() {
                     posao?.let {
                         posaoList.add(it)
                     }
+                }
+                if (_namefilter.value != null && _namefilter.value!! != "") {
+                    posaoList = posaoList.filter{it.names!!.contains(_namefilter.value!!)} as MutableList<Posao>
+                }
+                if (_salaryfilter.value != null && _salaryfilter.value!! != "") {
+                    posaoList = posaoList.filter{it.salary!!.toInt() >= _salaryfilter.value!!.toInt()} as MutableList<Posao>
+                }
+                if (_starsfilter.value != null && _starsfilter.value!! != "") {
+                    posaoList = posaoList.filter{it.stars!!.toInt() >= _starsfilter.value!!.toInt()} as MutableList<Posao>
+                }
+                if (_radiusfilter.value != null && _radiusfilter.value!! != "" && isUserSet!= false) {
+                    posaoList = posaoList.filter{filterByRadius(it)} as MutableList<Posao>
                 }
                 PosaoList = posaoList as ArrayList<Posao>
                 posaoLiveData.postValue(posaoList)
@@ -126,9 +151,47 @@ class PosaoViewModel: ViewModel() {
         })
     }
 
+    private fun filterByRadius(posao: Posao) : Boolean {
+        val km = _radiusfilter.value!!.toDouble()
+        val rad = km / 111
+        if (posao.latitude!!.toDouble()<=_userlat.value!!.toDouble()+rad &&
+            posao.latitude!!.toDouble()>=_userlat.value!!.toDouble()-rad &&
+            posao.longitude!!.toDouble()<=_userlog.value!!.toDouble()+rad &&
+            posao.longitude!!.toDouble()>=_userlog.value!!.toDouble()-rad){
+            return true
+        }
+        return false
+    }
+
+    fun addUserPosition(lat : String, log : String) {
+        _userlat.postValue(lat)
+        _userlog.postValue(log)
+    }
+
+
+    fun setFilters(filterName : String, filterSalary: String, filterStars: String, filterRadius : String){
+        if (filterName != null && filterName != "")
+        {
+            _namefilter.value = filterName
+        }
+        if (filterSalary != null && filterSalary != "")
+        {
+            _salaryfilter.value = filterSalary
+        }
+        if (filterStars != null && filterStars != "")
+        {
+            _starsfilter.value = filterStars
+        }
+        if (filterRadius != null && filterRadius != "")
+        {
+            _radiusfilter.value = filterRadius
+        }
+    }
+
+
     /*fun setNameQuery(){
         if (posaoNameFilter.value != null && _nameFilterOn.value!!) {
-            query = db.cillection("posao").orderBy("name")
+            query = db.collection("posao").orderBy("name")
                 .WhereArrayContains("nameQueryList", posaoNameFilter.value!!)
         }
     }

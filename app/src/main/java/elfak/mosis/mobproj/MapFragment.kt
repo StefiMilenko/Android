@@ -2,13 +2,17 @@ package elfak.mosis.mobproj
 
 import android.content.Context
 import android.content.pm.PackageManager
+import android.location.LocationManager
 import android.os.Bundle
 import android.view.*
 import android.widget.Button
+import android.widget.EditText
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
@@ -31,12 +35,14 @@ class MapFragment : Fragment() {
     lateinit var map: MapView
     private val posaoViewModel: PosaoViewModel by activityViewModels()
     private val locationViewModel: LocationViewModel by activityViewModels()
+    private lateinit var locationManager: LocationManager
     private val startPoint = GeoPoint(43.3209, 21.8958)
 
     private lateinit var locationOverlay: MyLocationNewOverlay
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+
     }
 
     override fun onCreateView(
@@ -80,22 +86,24 @@ class MapFragment : Fragment() {
         //val startPoint = GeoPoint(43.3209, 21.8958)
         map.controller.setCenter(startPoint)
         map.invalidate()
+        setPosaoOnMap()
+        val filterName: EditText = requireView().findViewById<EditText>(R.id.filter_name)
+        val filterSalary: EditText = requireView().findViewById<EditText>(R.id.filter_salary)
+        val filterStars: EditText = requireView().findViewById<EditText>(R.id.filter_stars)
+        val filterRadius: EditText = requireView().findViewById<EditText>(R.id.filter_radius)
+        setRadiusFilterVis()
         val fetchButton: Button = requireView().findViewById<Button>(R.id.fetchbutton)
         fetchButton.setOnClickListener {
             posaoViewModel.fetchAllPosao()
             posaoViewModel.posaoLiveData.observe(viewLifecycleOwner, Observer { posaoList ->
                 // Clear existing markers on the map
                 map.overlays.clear()
-
-               /* val query = posaoRef
-                    .orderByChild("latitude")
-                    .startAt(startPoint.latitude-0.2)
-                    .endAt(startPoint.latitude+0.2)
-                    .orderByChild("longitude")
-                    .startAt(startPoint.longitude-0.2)
-                    .endAt(startPoint.longitude+0.2)*/
-
-                // Add markers for each Posao
+                val name:String =filterName.text.toString()
+                val salary: String = filterSalary.text.toString()
+                val stars: String = filterStars.text.toString()
+                val radius: String = filterRadius.text.toString()
+                posaoViewModel.setFilters(name, salary, stars, radius)
+                // Add markers
                 for (posao in posaoList) {
                     val marker = Marker(map)
                     val log = posao.longitude!!.toDouble()
@@ -109,6 +117,13 @@ class MapFragment : Fragment() {
                 map.invalidate()
                 setMyLocationOverlay()
             })
+        }
+    }
+
+    private fun setRadiusFilterVis() {
+        if (posaoViewModel.isUserSet == false){
+            val filterRadius: EditText = requireView().findViewById<EditText>(R.id.filter_radius)
+            filterRadius.setVisibility(View.INVISIBLE)
         }
     }
 
@@ -133,6 +148,13 @@ class MapFragment : Fragment() {
         var myLocationOverlay = MyLocationNewOverlay(GpsMyLocationProvider(activity), map)
         myLocationOverlay.enableMyLocation()
         map.overlays.add(myLocationOverlay)
+        myLocationOverlay.runOnFirstFix {
+            locationViewModel.fetchUserLocation(myLocationOverlay.myLocation)
+            locationViewModel.setUserLocation()
+            posaoViewModel.isUserSet = true
+            posaoViewModel.addUserPosition(locationViewModel.userlatitude.value!!.toString(), locationViewModel.userlongitude.value!!.toString())
+            setRadiusFilterVis()
+        }
     }
 
     private val requestPermissionLauncher = registerForActivityResult(
@@ -189,5 +211,22 @@ class MapFragment : Fragment() {
         super.onPause()
         map.onPause()
     }
+    fun setPosaoOnMap() {
+        posaoViewModel.fetchAllPosao()
+        posaoViewModel.posaoLiveData.observe(viewLifecycleOwner, Observer { posaoList ->
 
+            map.overlays.clear()
+            for (posao in posaoList) {
+                val marker = Marker(map)
+                val log = posao.longitude!!.toDouble()
+                val lat = posao.latitude!!.toDouble()
+                marker.position = GeoPoint(log, lat)
+                marker.title = posao.name!!
+                map.overlays.add(marker)
+            }
+
+            map.invalidate()
+            setMyLocationOverlay()
+        })
+    }
 }

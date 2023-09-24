@@ -12,6 +12,9 @@ import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import elfak.mosis.mobproj.data.Posao
 import elfak.mosis.mobproj.databinding.FragmentListBinding
 import elfak.mosis.mobproj.model.PosaoViewModel
@@ -19,9 +22,7 @@ import elfak.mosis.mobproj.model.PosaoViewModel
 class ListFragment : Fragment() {
 
     private var _binding: FragmentListBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
+    private var auth: FirebaseAuth = Firebase.auth
     private val binding get() = _binding!!
     private val posaoViewModel: PosaoViewModel by activityViewModels()
 
@@ -70,9 +71,12 @@ class ListFragment : Fragment() {
             this.findNavController().navigate(R.id.action_ListFragment_to_EditFragment)
         }
         else if (item.itemId == 3){
-            posaoViewModel.PosaoList.removeAt(info.position)
-            val posaoList: ListView = requireView().findViewById<ListView>(R.id.mobproj_list)
-            posaoList.adapter = this@ListFragment.context?.let{ ArrayAdapter<Posao>(it, android.R.layout.simple_list_item_1,posaoViewModel.PosaoList)}
+            if (posaoViewModel.PosaoList[info.position].userId == auth.currentUser!!.uid){
+                posaoViewModel.PosaoList.removeAt(info.position)
+                val posaoList: ListView = requireView().findViewById<ListView>(R.id.mobproj_list)
+                posaoList.adapter = this@ListFragment.context?.let{ ArrayAdapter<Posao>(it, android.R.layout.simple_list_item_1,posaoViewModel.PosaoList)}
+            }
+            else{ Toast. makeText(getActivity(), "Ne mozete obrisati tudi posao!", Toast. LENGTH_SHORT) }
             }
         else if (item.itemId == 4){
             posaoViewModel.selected = posaoViewModel.PosaoList[info.position]

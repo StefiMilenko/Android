@@ -43,6 +43,7 @@ class MainActivity : AppCompatActivity() {
             //textView.setText(user.email)
         }
 
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

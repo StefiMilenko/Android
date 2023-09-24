@@ -40,7 +40,7 @@ class HomeFragment : Fragment() {
         auth=FirebaseAuth.getInstance()
         user = auth.currentUser!!;
         textView =  requireView().findViewById(R.id.textview_first)
-        textView.setText(user.email)
+        textView.setText("Hello " + user.email)
         binding.buttonFirst.setOnClickListener {
             findNavController().navigate(R.id.action_HomeFragment_to_ListFragment)
         }
