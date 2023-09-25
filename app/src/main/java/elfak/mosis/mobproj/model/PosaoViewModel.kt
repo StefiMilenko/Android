@@ -170,22 +170,17 @@ class PosaoViewModel: ViewModel() {
 
 
     fun setFilters(filterName : String, filterSalary: String, filterStars: String, filterRadius : String){
-        if (filterName != null && filterName != "")
-        {
-            _namefilter.value = filterName
-        }
-        if (filterSalary != null && filterSalary != "")
-        {
-            _salaryfilter.value = filterSalary
-        }
-        if (filterStars != null && filterStars != "")
-        {
-            _starsfilter.value = filterStars
-        }
-        if (filterRadius != null && filterRadius != "")
-        {
-            _radiusfilter.value = filterRadius
-        }
+        _namefilter.value = filterName
+        _salaryfilter.value = filterSalary
+        _starsfilter.value = filterStars
+        _radiusfilter.value = filterRadius
+    }
+    fun resetFilters()
+    {
+        _namefilter.value = ""
+        _salaryfilter.value = ""
+        _starsfilter.value = ""
+        _radiusfilter.value = ""
     }
 
 

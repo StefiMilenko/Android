@@ -9,7 +9,7 @@
     <string name="edit_fragment_label">Edit Fragment</string>
     <string name="view_fragment_label">View Fragment</string>
     <string name="map_fragment_label">Map Fragment</string>
-    <string name="next">Next</string>
+    <string name="next">Go to Map</string>
     <string name="previous">Previous</string>
 
     <string name="hello_home_fragment">Hello first fragment</string>
@@ -23,8 +23,8 @@
     <string name="action_userlist">User List</string>
     <string name="view_posao_label">Posao List</string>
     <string name="action_posaolist">Posao List</string>
-    <string name="edit_stars">Rating</string>
-    <string name="edit_salary">Salary</string>
+    <string name="edit_stars">Edit Rating:</string>
+    <string name="edit_salary">Edit Salary:</string>
     <string name="filter_radius_string">Radius in km</string>
     <string name="filter_stars_string">Filter by rating</string>
     <string name="filter_salary_string">Filter by salary</string>

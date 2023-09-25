@@ -66,9 +66,14 @@ class MainActivity : AppCompatActivity() {
                 navController.navigate(R.id.action_ListFragment_to_EditFragment)
             else if (navController.currentDestination?.id == R.id.MapFragment)
                 navController.navigate(R.id.action_MapFragment_to_EditFragment)
-            else if (navController.currentDestination?.id == R.id.PosaoViewFragment)
-                navController.navigate(R.id.action_PosaoViewFragment_to_EditFragment)
         }
+    }
+
+    private fun signOut() {
+        Firebase.auth.signOut()
+        val intent : Intent = Intent(applicationContext, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -85,8 +90,7 @@ class MainActivity : AppCompatActivity() {
             R.id.action_show_map -> findNavController(R.id.nav_host_fragment_content_main).navigate(R.id.action_HomeFragment_to_MapFragment)
             R.id.action_list -> Toast.makeText(this, "List", Toast.LENGTH_SHORT).show()
             R.id.action_edit -> Toast.makeText(this, "Edit", Toast.LENGTH_SHORT).show()
-            R.id.action_posaolist ->Toast.makeText(this, "UserList", Toast.LENGTH_SHORT).show()
-            R.id.action_logout -> Firebase.auth.signOut()
+            R.id.action_logout -> signOut()
         }
             return super.onOptionsItemSelected(item)
 

@@ -66,9 +66,13 @@ class ListFragment : Fragment() {
             posaoViewModel.selected = posaoViewModel.PosaoList[info.position]
             this.findNavController().navigate(R.id.action_ListFragment_to_ViewFragment)
         }
-        else if (item.itemId == 2){
-            posaoViewModel.selected=posaoViewModel.PosaoList[info.position]
-            this.findNavController().navigate(R.id.action_ListFragment_to_EditFragment)
+        else if (item.itemId == 2) {
+            if (posaoViewModel.PosaoList[info.position].userId == auth.currentUser!!.uid)
+            {
+                posaoViewModel.selected=posaoViewModel.PosaoList[info.position]
+                this.findNavController().navigate(R.id.action_ListFragment_to_EditFragment)
+            }
+            else{ Toast. makeText(getActivity(), "Ne mozete azurirati tudi posao!", Toast. LENGTH_SHORT).show() }
         }
         else if (item.itemId == 3){
             if (posaoViewModel.PosaoList[info.position].userId == auth.currentUser!!.uid){
@@ -76,7 +80,7 @@ class ListFragment : Fragment() {
                 val posaoList: ListView = requireView().findViewById<ListView>(R.id.mobproj_list)
                 posaoList.adapter = this@ListFragment.context?.let{ ArrayAdapter<Posao>(it, android.R.layout.simple_list_item_1,posaoViewModel.PosaoList)}
             }
-            else{ Toast. makeText(getActivity(), "Ne mozete obrisati tudi posao!", Toast. LENGTH_SHORT) }
+            else{ Toast. makeText(getActivity(), "Ne mozete obrisati tudi posao!", Toast. LENGTH_SHORT).show() }
             }
         else if (item.itemId == 4){
             posaoViewModel.selected = posaoViewModel.PosaoList[info.position]

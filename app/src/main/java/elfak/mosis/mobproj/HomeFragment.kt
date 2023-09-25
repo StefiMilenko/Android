@@ -41,9 +41,6 @@ class HomeFragment : Fragment() {
         user = auth.currentUser!!;
         textView =  requireView().findViewById(R.id.textview_first)
         textView.setText("Hello " + user.email)
-        binding.buttonFirst.setOnClickListener {
-            findNavController().navigate(R.id.action_HomeFragment_to_ListFragment)
-        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,10 +65,6 @@ class HomeFragment : Fragment() {
             }
             R.id.action_edit -> {
                 this.findNavController().navigate(R.id.action_HomeFragment_to_EditFragment)
-                true
-            }
-            R.id.action_posaolist -> {
-                this.findNavController().navigate(R.id.action_HomeFragment_to_PosaoViewFragment)
                 true
             }
             else -> super.onOptionsItemSelected(item)

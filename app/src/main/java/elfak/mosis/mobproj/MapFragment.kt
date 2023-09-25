@@ -51,6 +51,7 @@ class MapFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_map, container, false)
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -82,7 +83,7 @@ class MapFragment : Fragment() {
         } else {
             setupMap()
         }
-        map.controller.setZoom(12.0)
+        map.controller.setZoom(8.0)
         //val startPoint = GeoPoint(43.3209, 21.8958)
         map.controller.setCenter(startPoint)
         map.invalidate()
@@ -91,7 +92,6 @@ class MapFragment : Fragment() {
         val filterSalary: EditText = requireView().findViewById<EditText>(R.id.filter_salary)
         val filterStars: EditText = requireView().findViewById<EditText>(R.id.filter_stars)
         val filterRadius: EditText = requireView().findViewById<EditText>(R.id.filter_radius)
-        setRadiusFilterVis()
         val fetchButton: Button = requireView().findViewById<Button>(R.id.fetchbutton)
         fetchButton.setOnClickListener {
             posaoViewModel.fetchAllPosao()
@@ -120,23 +120,16 @@ class MapFragment : Fragment() {
         }
     }
 
-    private fun setRadiusFilterVis() {
-        if (posaoViewModel.isUserSet == false){
-            val filterRadius: EditText = requireView().findViewById<EditText>(R.id.filter_radius)
-            filterRadius.setVisibility(View.INVISIBLE)
-        }
-    }
-
     private fun setupMap(){
         //var startPoint:GeoPoint = GeoPoint(43.3209, 21.8958)
-        map.controller.setZoom(12.0)
+        map.controller.setZoom(8.0)
         if(locationViewModel.setLocation){
             setOnMapClickOverlay()
         }
         else {
             if(posaoViewModel.selected!=null){
-                startPoint.longitude = posaoViewModel.selected!!.longitude!!.toDouble()
-                startPoint.latitude = posaoViewModel.selected!!.latitude!!.toDouble()
+                startPoint.latitude = posaoViewModel.selected!!.longitude!!.toDouble()
+                startPoint.longitude = posaoViewModel.selected!!.latitude!!.toDouble()
             } else {
                 setMyLocationOverlay()
             }
@@ -153,7 +146,6 @@ class MapFragment : Fragment() {
             locationViewModel.setUserLocation()
             posaoViewModel.isUserSet = true
             posaoViewModel.addUserPosition(locationViewModel.userlatitude.value!!.toString(), locationViewModel.userlongitude.value!!.toString())
-            setRadiusFilterVis()
         }
     }
 
@@ -184,10 +176,16 @@ class MapFragment : Fragment() {
     }
 
 
+
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId){
             R.id.action_edit -> {
                 this.findNavController().navigate(R.id.action_MapFragment_to_EditFragment)
+                true
+            }
+            R.id.action_list -> {
+                this.findNavController().navigate(R.id.action_MapFragment_to_ViewFragment)
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -196,9 +194,7 @@ class MapFragment : Fragment() {
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
-        var item = menu.findItem(R.id.action_list)
-        item.isVisible = false
-        item = menu.findItem(R.id.action_show_map)
+        var item = menu.findItem(R.id.action_show_map)
         item.isVisible = false
     }
 
@@ -228,5 +224,10 @@ class MapFragment : Fragment() {
             map.invalidate()
             setMyLocationOverlay()
         })
+    }
+
+    override fun onDestroyView() {
+        //posaoViewModel.resetFilters()
+        super.onDestroyView()
     }
 }

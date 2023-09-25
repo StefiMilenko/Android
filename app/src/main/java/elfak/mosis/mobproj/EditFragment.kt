@@ -76,7 +76,9 @@ class EditFragment : Fragment() {
         locationViewModel.latitude.observe(viewLifecycleOwner, latObserver)*/
         if (posaoViewModel.selected!=null){
             editName.setText(posaoViewModel.selected?.name)
-            editName.setText(posaoViewModel.selected?.description)
+            editDesc.setText(posaoViewModel.selected?.description)
+            editSalary.setText(posaoViewModel.selected?.salary)
+            editStars.setText(posaoViewModel.selected?.stars)
         }
         val addButton: Button = requireView().findViewById<Button>(R.id.editposao_finish_button)
         addButton.isEnabled= false

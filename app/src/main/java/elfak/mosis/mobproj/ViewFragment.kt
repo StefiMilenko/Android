@@ -8,11 +8,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import elfak.mosis.mobproj.databinding.FragmentViewBinding
+import elfak.mosis.mobproj.model.LocationViewModel
 import elfak.mosis.mobproj.model.PosaoViewModel
 
 
 class ViewFragment : Fragment() {
     private val posaoViewModel: PosaoViewModel by activityViewModels()
+    private val locationViewModel: LocationViewModel by activityViewModels()
     private var _binding: FragmentViewBinding? = null
     private val binding get() = _binding!!
 
@@ -33,8 +35,11 @@ class ViewFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.viewposaoNameText.text=posaoViewModel.selected?.name
         binding.viewposaoDescText.text=posaoViewModel.selected?.description
+        binding.viewposaoSalaryText.text=posaoViewModel.selected?.salary
+        binding.viewposaoStarsText.text=posaoViewModel.selected?.stars
         binding.viewposaoFinishButton.setOnClickListener{
-            findNavController().popBackStack()
+            posaoViewModel.selected = posaoViewModel.selected
+            this.findNavController().navigate(R.id.action_ViewFragment_to_MapFragment)
         }
     }
     override fun onDestroyView(){
