@@ -80,7 +80,7 @@ class PosaoViewModel: ViewModel() {
         return substrings
     }
 
-    fun putPosao(uuid: String){
+    /*fun putPosao(uuid: String){
         val posao = Posao(uuid,
             auth.currentUser!!.uid,
             _name.value,
@@ -101,7 +101,7 @@ class PosaoViewModel: ViewModel() {
             .addOnFailureListener { e->
                 _actionState.value = ActionState.ActionError("Upload error: ${e.message}")
             }
-    }
+    }*/
 
     fun setValues(posao: Posao) {
         _name.value = posao.name!!

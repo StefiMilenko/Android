@@ -185,7 +185,7 @@ class MapFragment : Fragment() {
                 true
             }
             R.id.action_list -> {
-                this.findNavController().navigate(R.id.action_MapFragment_to_ViewFragment)
+                this.findNavController().navigate(R.id.action_MapFragment_to_ListFragment)
                 true
             }
             else -> super.onOptionsItemSelected(item)

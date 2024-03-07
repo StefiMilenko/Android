@@ -30,19 +30,13 @@ class PosaoViewFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(this.context)
         val posaoAdapter = PosaoAdapter(emptyList())
         recyclerView.adapter = posaoAdapter
-
-// Observe LiveData for Posao
         posaoViewModel.posaoLiveData.observe(viewLifecycleOwner, Observer { posaoList ->
-            // Update the adapter's data when LiveData changes
             posaoAdapter.submitList(posaoList)
         })
 
-// Handle item click to show additional attributes
         posaoAdapter.setOnItemClickListener { posao ->
-            // Show additional attributes (salary and rating) when a Posao item is clicked
             val salary = posao.salary
             val rating = posao.stars
-            // Update your UI to display salary and rating as needed
         }
    }
 

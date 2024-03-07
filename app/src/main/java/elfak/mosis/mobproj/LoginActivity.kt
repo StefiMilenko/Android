@@ -1,6 +1,7 @@
 package elfak.mosis.mobproj
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,6 +9,7 @@ import android.text.TextUtils
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 
 class LoginActivity : AppCompatActivity() {
@@ -27,6 +29,7 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+        FirebaseApp.initializeApp(this)
         auth = FirebaseAuth.getInstance()
         val editEmail: EditText = findViewById<EditText>(R.id.edit_email)
         val editPassword: EditText = findViewById<EditText>(R.id.edit_password)
